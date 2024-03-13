@@ -71,7 +71,7 @@ final class AuthenticationFailureHandler implements AuthenticationFailureHandler
             }
 
             if ('/' === $options['failure_path'][0]) {
-                $failurePath = $request->getUriForPath($options['failure_path'][0]);
+                $failurePath = $request->getUriForPath($options['failure_path']);
             } else {
                 $failurePath = $this->router->generate($options['failure_path'], ['key' => $key]);
             }
@@ -86,7 +86,7 @@ final class AuthenticationFailureHandler implements AuthenticationFailureHandler
         }
 
         if ('/' === $options['login_path'][0]) {
-            $loginPath = $request->getUriForPath($options['login_path'][0]);
+            $loginPath = $request->getUriForPath($options['login_path']);
         } else {
             $loginPath = $this->router->generate($options['login_path'], ['error' => $error]);
         }

@@ -71,6 +71,24 @@ final class AuthenticationFailureHandlerTest extends TestCase
         );
     }
 
+    public function testRedirectsToLoginPath()
+    {
+        $request = Request::create('/login', server: ['HTTP_HOST' => 'domain.tld']);
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        $router = $this->createMock(RouterInterface::class);
+        $router->expects($this->never())->method('generate');
+
+        $handler = new AuthenticationFailureHandler($requestStack, $router, false);
+        $handler->setOptions(['login_path' => '/login']);
+
+        $response = $handler->onAuthenticationFailure($request, new AuthenticationException());
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame('http://domain.tld/login', $response->getTargetUrl());
+    }
+
     public function testDoesNothingWhenConnectIsDisabled()
     {
         $request = Request::create('/login');
